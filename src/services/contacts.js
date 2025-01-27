@@ -1,53 +1,56 @@
 import { ContactsCollection } from '../db/models/contact.js';
 
-export const getAllContacts = async () => {
-  const contacts = await ContactsCollection.find();
-  return contacts;
+// export const getAllContacts = async (page, perPage) => {
+//   const skip = (page - 1) * perPage;
+//   const data = await ContactsCollection.find()
+//     .skip(skip)
+//     .limit(Number(perPage));
+//   const totalItems = await ContactsCollection.countDocuments();
+//   const totalPages = Math.ceil(totalItems / perPage);
+
+//   return { data, totalItems, totalPages };
+// };
+
+export const getAllContacts = async (
+  page = 1,
+  perPage = 10,
+  sortBy = 'name',
+  sortOrder = 'asc',
+) => {
+  const skip = (page - 1) * perPage;
+  const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+  const totalItems = await ContactsCollection.countDocuments();
+  const contacts = await ContactsCollection.find()
+    .sort({ [sortBy]: sortDirection })
+    .skip(skip)
+    .limit(perPage);
+
+  return {
+    data: contacts,
+    page,
+    perPage,
+    totalItems,
+    totalPages: Math.ceil(totalItems / perPage),
+    hasPreviousPage: page > 1,
+    hasNextPage: page < Math.ceil(totalItems / perPage),
+  };
 };
 
 export const getContactById = async (contactId) => {
-  const contact = await ContactsCollection.findById(contactId);
-  return contact;
+  return ContactsCollection.findById(contactId);
 };
 
-export const createContact = async ({
-  name,
-  phoneNumber,
-  email,
-  isFavourite,
-  contactType,
-}) => {
-  const newContact = new ContactsCollection({
-    name,
-    phoneNumber,
-    email,
-    isFavourite,
-    contactType,
+export const createContact = async (contactData) => {
+  return ContactsCollection.create(contactData);
+};
+
+export const updateContact = async (contactId, contactData) => {
+  return ContactsCollection.findByIdAndUpdate(contactId, contactData, {
+    new: true,
   });
-
-  await newContact.save();
-
-  return newContact;
-};
-
-export const updateContact = async (contactId, updates) => {
-  const contact = await ContactsCollection.findById(contactId);
-
-  if (!contact) {
-    throw { status: 404, message: 'Contact not found' };
-  }
-
-  const updatedContact = await contact.update(updates);
-  return updatedContact;
 };
 
 export const deleteContact = async (contactId) => {
-  const contact = await ContactsCollection.findById(contactId);
-
-  if (!contact) {
-    return null;
-  }
-
-  await contact.remove();
-  return contact;
+  return ContactsCollection.findByIdAndDelete(contactId);
 };
