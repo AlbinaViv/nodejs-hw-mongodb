@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import pino from 'pino-http';
 import { env } from './utils/env.js';
-import { getAllContacts, getContactById } from './services/contacts.js';
+import contactsRouter from './routers/contacts.js';
 
 dotenv.config();
 
@@ -29,52 +29,19 @@ export function startServer() {
     });
   });
 
-  app.get('/contacts', async (req, res) => {
-    const allContacts = await getAllContacts();
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: allContacts,
-    });
-  });
+  app.use('/contacts', contactsRouter);
 
-  app.get('/contacts/:contactId', async (req, res) => {
-    const { contactId } = req.params;
-
-    try {
-      const contact = await getContactById(contactId);
-
-      if (contact === null) {
-        res.status(404).json({
-          message: 'Contact not found',
-        });
-        return;
-      }
-      res.json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: 'Internal server error',
-      });
-      console.error(error.message);
-    }
-  });
-
-  app.use('*', (req, res, next) => {
+  app.use('*', (req, res) => {
     res.status(404).json({
       message: 'Not found',
     });
-    next();
   });
 
-  app.use('*', (error, req, res, next) => {
-    res.status(500).json({
-      message: 'Something went wrong',
-      error: error.message,
+  app.use((error, req, res, next) => {
+    res.status(error.status || 500).json({
+      message: error.message || 'Something went wrong',
     });
+    console.error(error.stack);
     next();
   });
 
