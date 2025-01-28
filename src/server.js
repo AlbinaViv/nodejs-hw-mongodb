@@ -4,6 +4,7 @@ import cors from 'cors';
 import pino from 'pino-http';
 import { env } from './utils/env.js';
 import contactsRouter from './routers/contacts.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 dotenv.config();
 
@@ -37,13 +38,7 @@ export function startServer() {
     });
   });
 
-  app.use((error, req, res, next) => {
-    res.status(error.status || 500).json({
-      message: error.message || 'Something went wrong',
-    });
-    console.error(error.stack);
-    next();
-  });
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

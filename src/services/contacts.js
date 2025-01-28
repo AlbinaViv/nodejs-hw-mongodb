@@ -37,7 +37,7 @@ export const updateContact = async (contactId, updates) => {
     throw { status: 404, message: 'Contact not found' };
   }
 
-  const updatedContact = await contact.update(updates);
+  const updatedContact = await contact.updateOne(updates);
   return updatedContact;
 };
 
@@ -48,6 +48,6 @@ export const deleteContact = async (contactId) => {
     return null;
   }
 
-  await contact.remove();
+  await contact.deleteOne();
   return contact;
 };
