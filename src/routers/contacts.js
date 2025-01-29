@@ -1,11 +1,11 @@
 import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
+  createContactController,
+  deleteContactController,
   getAllContactsController,
   getContactByIdController,
-  createContactController,
   updateContactController,
-  deleteContactController,
 } from '../controllers/contacts.js';
 
 const router = express.Router();
