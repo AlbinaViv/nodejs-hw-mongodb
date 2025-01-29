@@ -4,7 +4,8 @@ import cors from 'cors';
 import pino from 'pino-http';
 import { env } from './utils/env.js';
 import contactsRouter from './routers/contacts.js';
-import { errorHandler } from './middlewares/errorHandler.js';
+
+import createHttpError from 'http-errors';
 
 dotenv.config();
 
@@ -38,7 +39,7 @@ export function startServer() {
     });
   });
 
-  app.use(errorHandler);
+  app.use(createHttpError);
 
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
