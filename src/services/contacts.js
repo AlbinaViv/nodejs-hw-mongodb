@@ -35,6 +35,8 @@ export const createContact = async (payload) => {
 };
 
 export const updateContact = async (contactId, payload) => {
+  console.log('payload', payload);
+
   return await ContactsCollection.findByIdAndUpdate(contactId, payload, {
     new: true,
   });

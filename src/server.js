@@ -17,13 +17,13 @@ export function startServer() {
   app.use(cors());
   app.use(express.json());
 
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  // app.use(
+  //   pino({
+  //     transport: {
+  //       target: 'pino-pretty',
+  //     },
+  //   }),
+  // );
 
   app.get('/', (req, res) => {
     res.json({
