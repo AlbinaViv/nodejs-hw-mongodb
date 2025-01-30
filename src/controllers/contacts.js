@@ -8,13 +8,26 @@ import {
   deleteContact,
 } from '../services/contacts.js';
 
-export const getAllContactsController = async (req, res) => {
-  const allContacts = await getAllContacts();
-  res.json({
-    status: 200,
-    message: 'Successfully found contacts!',
-    data: allContacts,
-  });
+// export const getAllContactsController = async (req, res, next) => {
+//   const allContacts = await getAllContacts();
+//   res.json({
+//     status: 200,
+//     message: 'Successfully found contacts!',
+//     data: allContacts,
+//   });
+// };
+
+export const getAllContactsController = async (req, res, next) => {
+  try {
+    const allContacts = await getAllContacts();
+    res.json({
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: allContacts,
+    });
+  } catch (err) {
+    next(err); // Передаємо помилку в middleware
+  }
 };
 
 export const getContactByIdController = async (req, res, next) => {
