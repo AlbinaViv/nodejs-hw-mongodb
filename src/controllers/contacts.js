@@ -87,8 +87,7 @@ export const deleteContactController = async (req, res, next) => {
     const deletedContact = await deleteContact(contactId);
 
     if (!deletedContact) {
-      next(createHttpError(404, 'Contact not found'));
-      return;
+      return next(createHttpError(404, 'Contact not found'));
     }
 
     res.status(204).send();
