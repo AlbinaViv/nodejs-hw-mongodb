@@ -6,6 +6,7 @@ import { env } from './utils/env.js';
 import contactsRouter from './routers/contacts.js';
 
 import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 dotenv.config();
 
@@ -33,13 +34,9 @@ export function startServer() {
 
   app.use('/contacts', contactsRouter);
 
-  app.use('*', (req, res) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
-
   app.use(errorHandler);
+
+  app.use('*', notFoundHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
