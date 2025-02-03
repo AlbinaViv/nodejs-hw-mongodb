@@ -1,18 +1,15 @@
-import { validationResult } from 'express-validator';
+import createHttpError from 'http-errors';
 
-export const validateBody = (schema) => {
-  return async (req, res, next) => {
-    await Promise.all(schema.map((validation) => validation.run(req)));
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        status: 400,
-        message: 'Validation error',
-        errors: errors.array(),
-      });
-    }
-
+export const validateBody = (schema) => async (req, res, next) => {
+  try {
+    await schema.validateAsync(req.body, {
+      abortEarly: false,
+    });
     next();
-  };
+  } catch (err) {
+    const error = createHttpError(400, 'Bad Request', {
+      errors: err.details,
+    });
+    next(error);
+  }
 };
