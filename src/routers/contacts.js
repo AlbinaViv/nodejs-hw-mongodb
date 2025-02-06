@@ -17,7 +17,9 @@ router.get(
   '/',
   ctrlWrapper(async (req, res, next) => {
     try {
+      console.log('User ID:', req.user._id); // Перевірка userId
       const contacts = await ContactCollection.find({ userId: req.user._id });
+      console.log('Contacts:', contacts); // Перевірка контактів
       res.status(200).json(contacts);
     } catch (error) {
       next(error);
