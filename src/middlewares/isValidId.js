@@ -1,19 +1,11 @@
-import { param } from 'express-validator';
-import { validationResult } from 'express-validator';
+import { isValidObjectId } from 'mongoose';
+import createError from 'http-errors';
 
-export const isValidId = async (req, res, next) => {
-  const idValidation = param('contactId')
-    .isMongoId()
-    .withMessage('Invalid contact ID');
-  await idValidation.run(req);
+export const isValidId = (req, res, next) => {
+  const { contactId } = req.params;
 
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      status: 400,
-      message: 'Invalid ID',
-      errors: errors.array(),
-    });
+  if (!isValidObjectId(contactId)) {
+    return next(createError(400, `Invalid ID format: ${contactId}`));
   }
 
   next();

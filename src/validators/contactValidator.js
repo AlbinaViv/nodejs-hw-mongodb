@@ -1,59 +1,17 @@
-import { body } from 'express-validator';
+import Joi from 'joi';
 
-export const createContactValidationSchema = [
-  body('name')
-    .optional()
-    .isString()
-    .withMessage('Name should be a string')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Name should be between 3 and 20 characters'),
-  body('phoneNumber')
-    .optional()
-    .isString()
-    .withMessage('Phone number should be a string')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Phone number should be between 3 and 20 characters'),
-  body('email')
-    .optional()
-    .isEmail()
-    .withMessage('Email should be a valid email address'),
-  body('isFavourite')
-    .optional()
-    .isBoolean()
-    .withMessage('isFavourite should be a boolean'),
-  body('contactType')
-    .optional()
-    .isString()
-    .withMessage('Contact type should be a string')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Contact type should be between 3 and 20 characters'),
-];
+export const createContactSchema = Joi.object({
+  name: Joi.string().min(3).max(20).required(),
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string().min(3).max(20).required(),
+  isFavourite: Joi.boolean().optional().default(false),
+  contactType: Joi.string().valid('home', 'work', 'other').required(),
+});
 
-export const updateContactValidationSchema = [
-  body('name')
-    .optional()
-    .isString()
-    .withMessage('Name should be a string')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Name should be between 3 and 20 characters'),
-  body('phoneNumber')
-    .optional()
-    .isString()
-    .withMessage('Phone number should be a string')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Phone number should be between 3 and 20 characters'),
-  body('email')
-    .optional()
-    .isEmail()
-    .withMessage('Email should be a valid email address'),
-  body('isFavourite')
-    .optional()
-    .isBoolean()
-    .withMessage('isFavourite should be a boolean'),
-  body('contactType')
-    .optional()
-    .isString()
-    .withMessage('Contact type should be a string')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Contact type should be between 3 and 20 characters'),
-];
+export const updateContactSchema = Joi.object({
+  name: Joi.string().min(3).max(20),
+  email: Joi.string().email(),
+  phoneNumber: Joi.string().min(3).max(20),
+  isFavourite: Joi.boolean().optional(),
+  contactType: Joi.string().valid('home', 'work', 'other'),
+}).or('name', 'email', 'phoneNumber', 'isFavourite', 'contactType');
