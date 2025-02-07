@@ -1,12 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import pino from 'pino-http';
 import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-import router from './routers/auth.js';
-import contactsRouter from './routers/contacts.js'; // підключаємо contacts.js
+import router from './routers/index.js';
 
 dotenv.config();
 
@@ -18,14 +16,6 @@ export function startServer() {
   app.use(cors());
   app.use(express.json());
 
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
-
   app.get('/', (req, res) => {
     res.json({
       message: 'Hello world!',
@@ -33,7 +23,6 @@ export function startServer() {
   });
 
   app.use(router);
-  app.use('/contacts', contactsRouter);
 
   app.use(errorHandler);
   app.use('*', notFoundHandler);
