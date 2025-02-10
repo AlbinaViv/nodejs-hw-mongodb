@@ -5,6 +5,7 @@ import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ export function startServer() {
 
   app.use(cors());
   app.use(express.json());
+  app.use(cookieParser());
 
   app.get('/', (req, res) => {
     res.json({
