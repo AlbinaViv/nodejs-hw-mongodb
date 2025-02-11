@@ -1,12 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import pino from 'pino-http';
 import { env } from './utils/env.js';
-import contactsRouter from './routers/contacts.js';
-
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import router from './routers/index.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -17,14 +16,7 @@ export function startServer() {
 
   app.use(cors());
   app.use(express.json());
-
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  app.use(cookieParser());
 
   app.get('/', (req, res) => {
     res.json({
@@ -32,10 +24,9 @@ export function startServer() {
     });
   });
 
-  app.use('/contacts', contactsRouter);
+  app.use(router);
 
   app.use(errorHandler);
-
   app.use('*', notFoundHandler);
 
   app.listen(PORT, () => {
