@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
-import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js';
 import cookieParser from 'cookie-parser';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 dotenv.config();
 
