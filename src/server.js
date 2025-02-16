@@ -6,6 +6,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import router from './routers/index.js';
 import cookieParser from 'cookie-parser';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { UPLOAD_DIR } from './constants/index.js';
 
 dotenv.config();
 
@@ -32,4 +33,6 @@ export function startServer() {
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
   });
+
+  app.use('/uploads', express.static(UPLOAD_DIR));
 }
