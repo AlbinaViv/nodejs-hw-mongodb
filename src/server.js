@@ -27,8 +27,8 @@ export function startServer() {
 
   app.use(router);
 
-  app.use(errorHandler);
   app.use('*', notFoundHandler);
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
