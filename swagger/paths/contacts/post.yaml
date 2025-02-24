@@ -2,13 +2,12 @@ tags:
   - Contacts
 summary: Create a new contact
 operationId: createContact
-description: Add a new contact to the database.
+description: 'Add a new contact to the database'
 security:
   - bearerAuth: []
 requestBody:
-  required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         required:
@@ -16,12 +15,22 @@ requestBody:
           - email
         properties:
           name:
+            description: "Contact's name"
             type: string
-            example: Jane Doe
+            example: 'Jane Doe'
           email:
+            description: "Contact's email"
             type: string
             format: email
-            example: jane.doe@example.com
+            example: 'jane.doe@example.com'
+          phone:
+            description: "Contact's phone number"
+            type: string
+            example: '+1234567890'
+          avatar:
+            description: "Contact's avatar image"
+            type: string
+            format: binary
 responses:
   '201':
     description: Successfully created contact
@@ -43,3 +52,5 @@ responses:
             data:
               type: object
               $ref: '../../components/schemas/contact.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
