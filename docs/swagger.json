@@ -161,16 +161,15 @@
         ],
         "summary": "Create a new contact",
         "operationId": "createContact",
-        "description": "Add a new contact to the database.",
+        "description": "Add a new contact to the database",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -179,13 +178,25 @@
                 ],
                 "properties": {
                   "name": {
+                    "description": "Contact's name",
                     "type": "string",
                     "example": "Jane Doe"
                   },
                   "email": {
+                    "description": "Contact's email",
                     "type": "string",
                     "format": "email",
                     "example": "jane.doe@example.com"
+                  },
+                  "phone": {
+                    "description": "Contact's phone number",
+                    "type": "string",
+                    "example": "+1234567890"
+                  },
+                  "avatar": {
+                    "description": "Contact's avatar image",
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               }
@@ -221,6 +232,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           }
         }
       }
@@ -280,28 +294,7 @@
             }
           },
           "404": {
-            "description": "Contact not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Contact not found."
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/401"
           }
         }
       },
@@ -450,28 +443,72 @@
       "contact": {
         "type": "object",
         "required": [
-          "id",
+          "_id",
           "name",
           "email",
-          "phone"
+          "phoneNumber",
+          "isFavourite",
+          "contactType",
+          "userId"
         ],
         "properties": {
-          "id": {
+          "_id": {
+            "description": "Contact's id",
             "type": "string",
-            "example": "65ca67e7ae7f10c88b598384"
+            "example": "65e4decdd286b30065d54af9"
           },
           "name": {
+            "description": "Contact's name",
             "type": "string",
-            "example": "John Doe"
+            "example": "Jane Doe"
           },
           "email": {
+            "description": "Contact's email",
             "type": "string",
             "format": "email",
-            "example": "johndoe@example.com"
+            "example": "jane.doe@example.com"
           },
-          "phone": {
+          "phoneNumber": {
+            "description": "Contact's phone number",
             "type": "string",
             "example": "+1234567890"
+          },
+          "isFavourite": {
+            "description": "Whether the contact is marked as favourite",
+            "type": "boolean",
+            "example": true
+          },
+          "contactType": {
+            "description": "Type of contact",
+            "type": "string",
+            "enum": [
+              "work",
+              "home",
+              "personal"
+            ],
+            "example": "work"
+          },
+          "userId": {
+            "description": "ID of the user who owns this contact",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "photo": {
+            "description": "Link to the contact's photo",
+            "type": "string",
+            "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+          },
+          "createdAt": {
+            "description": "Timestamp when the contact was created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-02-24T15:23:00.000Z"
+          },
+          "updatedAt": {
+            "description": "Timestamp when the contact was last updated",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-02-24T16:00:00.000Z"
           }
         }
       }
