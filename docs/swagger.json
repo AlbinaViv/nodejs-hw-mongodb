@@ -174,7 +174,8 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "email"
+                  "phoneNumber",
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -182,19 +183,34 @@
                     "type": "string",
                     "example": "Jane Doe"
                   },
+                  "phoneNumber": {
+                    "description": "Contact's phone number",
+                    "type": "string",
+                    "example": "+1234567890"
+                  },
                   "email": {
                     "description": "Contact's email",
                     "type": "string",
                     "format": "email",
                     "example": "jane.doe@example.com"
                   },
-                  "phone": {
-                    "description": "Contact's phone number",
-                    "type": "string",
-                    "example": "+1234567890"
+                  "isFavourite": {
+                    "description": "Mark as favourite contact",
+                    "type": "boolean",
+                    "example": false
                   },
-                  "avatar": {
-                    "description": "Contact's avatar image",
+                  "contactType": {
+                    "description": "Type of contact",
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "personal"
+                  },
+                  "photo": {
+                    "description": "Contact's photo",
                     "type": "string",
                     "format": "binary"
                   }
